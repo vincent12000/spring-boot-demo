@@ -1,5 +1,5 @@
 server:
-  port: 8888
+  port: 8899
 logging:
   level:
     org.springframework.web: DEBUG
@@ -16,8 +16,8 @@ spring:
     hibernate:
       # 生产时ddl-auto应改为none
       ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
@@ -26,11 +26,10 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
     joda-date-time-format: yyyy-MM-dd HH:mm:ss
-
 # JWT
 jwt:
   header: Authorization
-  secret: mySecret
+  secret: Z29mdWNreW91cnNlbGY=
   expiration: 604800
   tokenHead: "Bearer "
   route:

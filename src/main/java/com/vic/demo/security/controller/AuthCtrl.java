@@ -2,9 +2,11 @@ package com.vic.demo.security.controller;
 
 import com.vic.demo.model.User;
 import com.vic.demo.security.service.AuthService;
+import com.vic.demo.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +23,16 @@ public class AuthCtrl {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    protected AuthenticationManager authenticationManager;
+
+    @Autowired
+    protected IUserService userService;
+
     @RequestMapping(value = "${jwt.route.authentication.path}", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(
             @RequestBody User authenticationRequest) throws AuthenticationException {
+        User user = userService.findByUsername(authenticationRequest.getUsername());
         final String token = authService.login(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         // Return the token

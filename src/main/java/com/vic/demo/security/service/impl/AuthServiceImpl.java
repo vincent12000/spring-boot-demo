@@ -1,12 +1,14 @@
 package com.vic.demo.security.service.impl;
 
 import com.vic.demo.model.User;
+
 import com.vic.demo.security.model.JwtUser;
 import com.vic.demo.security.service.AuthService;
 import com.vic.demo.security.utils.JwtTokenUtil;
 import com.vic.demo.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +24,9 @@ import java.util.Date;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private AuthenticationManager authenticationManager;
+    @Autowired
+    protected AuthenticationManager authenticationManager;
+    @Autowired
     private UserDetailsService userDetailsService;
     private JwtTokenUtil jwtTokenUtil;
     private IUserService userService;
@@ -55,6 +59,7 @@ public class AuthServiceImpl implements AuthService {
         userToAdd.setRoles(Arrays.asList(new String[]{"ROLE_USER"}));
         userService.saveUser(userToAdd);
         return userToAdd;
+//        return null;
     }
 
     @Override
@@ -66,6 +71,7 @@ public class AuthServiceImpl implements AuthService {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         final String token = jwtTokenUtil.generateToken(userDetails);
         return token;
+//        return null;
     }
 
     @Override

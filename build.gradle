@@ -43,4 +43,5 @@ dependencies {
 			//'org.bouncycastle:bcprov-jdk15on:1.60',
 //			'io.jsonwebtoken:jjwt-jackson:0.10.5'
 //	implementation('org.springframework.boot:spriWebSecurityConfigurerAdapterng-boot-starter-test')
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
 }

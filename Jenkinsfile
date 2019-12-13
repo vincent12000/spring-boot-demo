@@ -1,23 +1,23 @@
 pipeline {
     agent {
         docker {
-            image 'maven:3.3.3'
+            image 'gradle:6.0-jdk8'
             args '-v /root/.m2:/root/.m2'
         }
     }
     stages {
         stage('Build') {
             steps {
-                sh 'mvn -B -DskipTests clean package'
+                sh 'gradle clean'
             }
         }
         stage('Test') { 
             steps {
-                sh 'mvn test' 
+                sh 'gradle test' 
             }
             post {
                 always {
-                    junit 'target/surefire-reports/*.xml' 
+                    junit 'build/reports/tests/test/index.html' 
                 }
             }
         }

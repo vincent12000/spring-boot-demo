@@ -9,17 +9,18 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'gradle clean'
+                sh 'gradle build'
             }
         }
-        stage('Test') { 
-            steps {
-                sh 'gradle test' 
-            }
-            post {
-                always {
-                    junit 'build/reports/tests/test/index.html' 
-                }
-            }
-        }
+        //stage('Test') { 
+        //    steps {
+        //        sh 'gradle test' 
+        //    }
+        //    post {
+        //        always {
+        //            junit 'build/reports/tests/test/index.html' 
+        //        }
+        //    }
+        //}
     }
 }

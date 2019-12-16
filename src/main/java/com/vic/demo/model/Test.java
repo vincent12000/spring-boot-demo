@@ -1,6 +1,7 @@
 package com.vic.demo.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -26,6 +27,8 @@ public class Test implements Serializable {
     private Long id;
 
     private Long count;
+
+    private BigDecimal price;
 
     @TableField("modifyTime")
     private LocalDateTime modifyTime;

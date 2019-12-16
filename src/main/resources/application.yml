@@ -29,8 +29,8 @@ spring:
 # JWT
 jwt:
   header: Authorization
-  secret: Z29mdWNreW91cnNlbGY=
-  expiration: 604800
+  secret: 6a63a7bf474249167a2010f4dd8ffa91c7cfdb4322e43555f243df2ab42edb959c98a862d88dd6ac8e031acb11cfc2f3800c03a802bd405e0614331545e8e3fb
+  expiration: 10
   tokenHead: "Bearer "
   route:
     authentication:

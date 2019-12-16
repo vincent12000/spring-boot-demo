@@ -38,6 +38,11 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
+        return new JwtAuthenticationTokenFilter();
+    }
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -48,13 +53,13 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * 不重写configure()的写
      */
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(jwtUserDetailsService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-        return authenticationProvider;
-    }
+//    @Bean
+//    public DaoAuthenticationProvider authenticationProvider() {
+//        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+//        authenticationProvider.setUserDetailsService(jwtUserDetailsService);
+//        authenticationProvider.setPasswordEncoder(passwordEncoder());
+//        return authenticationProvider;
+//    }
 
     // 设置 HTTP 验证规则
     @Override
@@ -78,7 +83,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .addFilterBefore(new JWTLoginFilter("/login", authenticationManager()),
 //                        UsernamePasswordAuthenticationFilter.class)
 //                // 添加一个过滤器验证其他请求的Token是否合法
-                .addFilterBefore(new JwtAuthenticationTokenFilter(),
+                .addFilterBefore(jwtAuthenticationTokenFilter(),
                         UsernamePasswordAuthenticationFilter.class);
     }
 

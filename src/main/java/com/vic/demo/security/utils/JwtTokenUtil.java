@@ -1,9 +1,8 @@
 package com.vic.demo.security.utils;
 
 import com.vic.demo.security.model.JwtUser;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +19,7 @@ import java.io.Serializable;
 import java.util.*;
 
 @Component
+@Slf4j
 public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -3301605591108950415L;
@@ -34,14 +34,7 @@ public class JwtTokenUtil implements Serializable {
     private Long expiration;
 
     public String getUsernameFromToken(String token) {
-        String username;
-        try {
-            final Claims claims = getClaimsFromToken(token);
-            username = claims.getSubject();
-        } catch (Exception e) {
-            username = null;
-        }
-        return username;
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 
     public Date getCreatedDateFromToken(String token) {
@@ -50,6 +43,7 @@ public class JwtTokenUtil implements Serializable {
             final Claims claims = getClaimsFromToken(token);
             created = new Date((Long) claims.get(CLAIM_KEY_CREATED));
         } catch (Exception e) {
+            e.printStackTrace();
             created = null;
         }
         return created;
@@ -61,21 +55,28 @@ public class JwtTokenUtil implements Serializable {
             final Claims claims = getClaimsFromToken(token);
             expiration = claims.getExpiration();
         } catch (Exception e) {
+            e.printStackTrace();
             expiration = null;
         }
         return expiration;
     }
 
     private Claims getClaimsFromToken(String token) {
-        Claims claims;
-        try {
-            claims = Jwts.parser()
+//        Claims claims;
+//        try {
+//            claims = Jwts.parser()
+//                    .setSigningKey(secret)
+//                    .parseClaimsJws(token)
+//                    .getBody();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            claims = null;
+//        }
+//        return claims;
+        Claims claims = Jwts.parser()
                     .setSigningKey(secret)
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (Exception e) {
-            claims = null;
-        }
         return claims;
     }
 
@@ -103,7 +104,7 @@ public class JwtTokenUtil implements Serializable {
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())
-//                .signWith(SignatureAlgorithm.HS512, Base64.getEncoder().encodeToString(secret.getBytes()))
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
@@ -126,13 +127,28 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        JwtUser user = (JwtUser) userDetails;
-        final String username = getUsernameFromToken(token);
-        final Date created = getCreatedDateFromToken(token);
-        //final Date expiration = getExpirationDateFromToken(token);
-        return (
-                username.equals(user.getUsername())
-                        && !isTokenExpired(token)
-                        && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
+//        JwtUser user = (JwtUser) userDetails;
+//        final String username = getUsernameFromToken(token);
+//        final Date created = getCreatedDateFromToken(token);
+//        //final Date expiration = getExpirationDateFromToken(token);
+//        return (
+//                username.equals(user.getUsername())
+//                        && !isTokenExpired(token)
+//                        && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
+        try {
+            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            return true;
+        } catch (SignatureException ex) {
+            log.error("Invalid JWT signature");
+        } catch (MalformedJwtException ex) {
+            log.error("Invalid JWT token");
+        } catch (ExpiredJwtException ex) {
+            log.error("Expired JWT token");
+        } catch (UnsupportedJwtException ex) {
+            log.error("Unsupported JWT token");
+        } catch (IllegalArgumentException ex) {
+            log.error("JWT claims string is empty.");
+        }
+        return false;
     }
 }

@@ -6,7 +6,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.vic.demo.dao.UserMapper;
 import com.vic.demo.model.User;
 import com.vic.demo.service.IUserService;
+import freemarker.template.utility.DateUtil;
 import org.springframework.stereotype.Service;
+
+import java.util.Calendar;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
@@ -25,4 +28,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public void saveUser(User user) {
         this.save(user);
     }
+
 }

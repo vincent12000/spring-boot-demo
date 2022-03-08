@@ -12,14 +12,8 @@ import org.springframework.context.annotation.Import;
 
 @MapperScan("com.vic.demo.dao")
 @SpringBootApplication
-//@ComponentScan(basePackages = {
-//		"com.vic.demo.config",
-//		"com.vic.demo.*.controller",
-//		"com.vic.demo.service",
-//		"com.vic.demo.security.service"})
-@Import({
-		JwtUserDetailsServiceImpl.class
-})
+@ComponentScan(basePackages = {
+		"com.vic.demo.*"})
 public class DemoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);

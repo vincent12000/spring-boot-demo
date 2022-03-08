@@ -14,21 +14,21 @@ import javax.annotation.PostConstruct;
 @Component
 public class JwtProperty {
 
-//    @Autowired
-//    private JwtProperties jwtProperties;
+    @Autowired
+    private JwtProperties jwtProperties;
 
     public static String header;
     public static String secret;
     public static String expiration;
     public static String tokenHead;
 
-//    @PostConstruct
-//    public void initConstants() {
-//        JwtProperty.header = jwtProperties.getHeader();
-//        JwtProperty.secret = jwtProperties.getSecret();
-//        JwtProperty.expiration = jwtProperties.getExpiration();
-//        JwtProperty.tokenHead = jwtProperties.getTokenHead();
-//    }
+    @PostConstruct
+    public void initConstants() {
+        JwtProperty.header = this.jwtProperties.getHeader();
+        JwtProperty.secret = this.jwtProperties.getSecret();
+        JwtProperty.expiration = this.jwtProperties.getExpiration();
+        JwtProperty.tokenHead = this.jwtProperties.getTokenHead();
+    }
 
     @Value("${jwt.header}")
     public void setHeader(String header) {

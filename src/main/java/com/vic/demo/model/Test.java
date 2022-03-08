@@ -24,14 +24,14 @@ public class Test implements Serializable {
 
 //    private static final long serialVersionUID = 1L;
 
-    private Long id;
+    public Long id;
 
-    private Long count;
+    public Long count;
 
-    private BigDecimal price;
+    public BigDecimal price;
 
     @TableField("modifyTime")
-    private LocalDateTime modifyTime;
+    public LocalDateTime modifyTime;
 
 
 }

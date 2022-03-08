@@ -19,6 +19,6 @@ public class User {
 
     private Date lastPasswordResetDate;
 
-    private List<String> roles;
+//    private List<String> roles;
 
 }

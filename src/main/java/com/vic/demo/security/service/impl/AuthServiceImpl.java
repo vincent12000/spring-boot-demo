@@ -56,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
         final String rawPassword = userToAdd.getPassword();
         userToAdd.setPassword(encoder.encode(rawPassword));
         userToAdd.setLastPasswordResetDate(new Date());
-        userToAdd.setRoles(Arrays.asList(new String[]{"ROLE_USER"}));
+//        userToAdd.setRoles(Arrays.asList(new String[]{"ROLE_USER"}));
         userService.saveUser(userToAdd);
         return userToAdd;
 //        return null;
@@ -71,7 +71,6 @@ public class AuthServiceImpl implements AuthService {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         final String token = jwtTokenUtil.generateToken(userDetails);
         return token;
-//        return null;
     }
 
     @Override

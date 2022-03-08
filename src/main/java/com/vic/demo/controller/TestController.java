@@ -2,8 +2,10 @@ package com.vic.demo.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.vic.demo.model.RestResponse;
 import com.vic.demo.model.Test;
 import com.vic.demo.service.ITestService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Role;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/test")
+@Slf4j
 public class TestController {
 
     @Autowired
@@ -32,18 +35,19 @@ public class TestController {
 
 
     @GetMapping("/a")
-    @PreAuthorize("hasRole('admin')")
-    public Test index() {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public RestResponse<Test> index() {
+        log.info("request /a");
 //        Test t = testService.getById(1);
         Test t = new Test();
-        t.setCount(1l);
-        t.setId(2l);
+        t.setCount(1L);
+        t.setId(2L);
         t.setPrice(BigDecimal.valueOf(210.0).multiply(BigDecimal.valueOf(0.7)).setScale(2, RoundingMode.UP));
-        System.out.println(t.getPrice());
-        return t;
+        return RestResponse.success(t);
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public List<Test> all() {
         return testService.findAll();
     }

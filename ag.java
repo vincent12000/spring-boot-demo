@@ -1,59 +1,48 @@
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
-public class PizzaOrders {
+public class BusDistanceCalculator {
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt();
-        int[] orders = new int[n];
-        for (int i = 0; i < n; i++) {
-            orders[i] = scanner.nextInt();
+        if (!scanner.hasNextInt()) return;
+
+        int num = scanner.nextInt(); // 公交车数量
+        int constM = scanner.nextInt(); // 固定为 2，每行两个数
+
+        List<int[]> intervals = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            int start = scanner.nextInt();
+            int end = scanner.nextInt();
+            intervals.add(new int[]{start, end});
         }
-        int k = scanner.nextInt();
-        
-        if (k == 0 || n < k) {
-            // 根据约束，k <= n，且k=0时无窗口，按题意可能不输出
-            return;
-        }
-        
-        Deque<Integer> deq = new ArrayDeque<>(); // 存储负数的索引
-        StringBuilder result = new StringBuilder();
-        
-        // 初始化第一个窗口（0到k-1）
-        for (int i = 0; i < k; i++) {
-            if (orders[i] < 0) {
-                deq.addLast(i);
-            }
-        }
-        
-        // 处理第一个窗口
-        if (!deq.isEmpty()) {
-            result.append(orders[deq.peekFirst()]);
-        } else {
-            result.append(0);
-        }
-        
-        // 滑动窗口：从i = k 到 n-1，每次窗口是 [i-k+1, i]
-        for (int i = k; i < n; i++) {
-            // 移除出窗口的元素（索引为 i - k）
-            if (!deq.isEmpty() && deq.peekFirst() == i - k) {
-                deq.removeFirst();
-            }
-            
-            // 添加新元素（索引为 i）
-            if (orders[i] < 0) {
-                deq.addLast(i);
-            }
-            
-            // 取当前窗口的第一个负数
-            if (!deq.isEmpty()) {
-                result.append(" ").append(orders[deq.peekFirst()]);
+
+        // 按起始点排序，起始点相同按结束点排序
+        Collections.sort(intervals, Comparator.comparingInt(a -> a[0]).thenComparingInt(a -> a[1]));
+
+        List<int[]> merged = new ArrayList<>();
+        for (int[] interval : intervals) {
+            if (merged.isEmpty()) {
+                merged.add(interval);
             } else {
-                result.append(" ").append(0);
+                int[] last = merged.get(merged.size() - 1);
+                // 如果当前区间与上一个区间重叠或相邻（start <= last[1]）
+                if (interval[0] <= last[1]) {
+                    last[1] = Math.max(last[1], interval[1]); // 合并
+                } else {
+                    merged.add(interval); // 不重叠，添加新区间
+                }
             }
         }
-        
-        System.out.println(result.toString());
+
+        long totalDistance = 0;
+        for (int[] interval : merged) {
+            totalDistance += (interval[1] - interval[0]);
+        }
+
+        System.out.println(totalDistance);
     }
 }
